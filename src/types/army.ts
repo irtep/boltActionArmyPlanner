@@ -25,7 +25,8 @@ export interface ArmyUnit {
   id: string;
   name: string;
   type: 'Infantry' | 'Artillery' | 'Vehicle' | 'Team' | 'Tank';
-  cost: UnitCost;
+  baseCost: UnitCost;
+  extraManCost: UnitCost;
   quantity: number; // also minimum quantity
   maxQuantity: number;
   weapons: string;

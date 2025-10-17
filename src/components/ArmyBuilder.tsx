@@ -37,7 +37,7 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({ nations }) => {
 
   // Helper function to calculate total cost of a unit
   const calculateUnitTotalCost = (unit: ArmyUnitExtended): number => {
-    const baseCost = unit.cost[unit.experience];
+    const baseCost = unit.baseCost[unit.experience];
     
     if (baseCost === undefined) {
       return 0;

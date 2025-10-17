@@ -21,13 +21,13 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
 
   const getAvailableExperiences = (): ExperienceLevel[] => {
     const experiences: ExperienceLevel[] = [];
-    if (unit.cost.inexperienced !== undefined) experiences.push('inexperienced');
+    if (unit.baseCost.inexperienced !== undefined) experiences.push('inexperienced');
     experiences.push('regular');
     experiences.push('veteran');
     return experiences;
   };
 
-  const getCostString = (cost: ArmyUnit['cost']) => {
+  const getCostString = (cost: ArmyUnit['baseCost']) => {
     const parts = [];
     if (cost.inexperienced) parts.push(`Inexp: ${cost.inexperienced}pts`);
     parts.push(`Reg: ${cost.regular}pts`);
@@ -36,15 +36,15 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
   };
 
   const getBaseCost = () => {
-    return unit.cost[selectedExperience] || 0;
+    return unit.baseCost[selectedExperience] || 0;
   };
 
   const getAdditionalMenCost = () => {
     // Calculate cost per additional man based on experience
     const costPerMan: Record<ExperienceLevel, number> = {
-      inexperienced: 7,
-      regular: 10,
-      veteran: 13
+      inexperienced: unit.extraManCost['inexperienced'] || 0,
+      regular: unit.extraManCost['regular'],
+      veteran: unit.extraManCost['veteran']
     };
     return additionalMen * costPerMan[selectedExperience];
   };
@@ -84,7 +84,7 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
       return unit.quantity + additionalMen;
     }
     if (option.desc.includes('submachine gun')) {
-      return option.max; // Always 1 for NCO
+      return option.max;
     }
     return option.max;
   };
@@ -106,7 +106,7 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
       <h3>{unit.name}</h3>
       <div className="unit-details">
         <p><strong>Type:</strong> {unit.type}</p>
-        <p><strong>Base Cost:</strong> {getCostString(unit.cost)}</p>
+        <p><strong>Base Cost:</strong> {getCostString(unit.baseCost)}</p>
         <p><strong>Base Quantity:</strong> {unit.quantity} men</p>
         <p><strong>Max Quantity:</strong> {unit.maxQuantity} men</p>
         <p><strong>Weapons:</strong> {unit.weapons}</p>
@@ -122,17 +122,27 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
           >
             {availableExperiences.map(exp => (
               <option key={exp} value={exp}>
-                {exp.charAt(0).toUpperCase() + exp.slice(1)} ({unit.cost[exp]}pts)
+                {exp.charAt(0).toUpperCase() + exp.slice(1)} ({unit.baseCost[exp]}pts)
               </option>
             ))}
           </select>
         </div>
 
+{/*
+        inexperienced: unit.extraManCost['inexperienced'] || 0,
+      regular: unit.extraManCost['regular'],
+      veteran: unit.extraManCost['veteran']
+*/}
+
         {/* Additional Men Selection */}
         {maxAdditionalMen > 0 && (
           <div className="option-selector">
             <label htmlFor={`additional-men-${unit.id}`}>
-              <strong>Additional Men:</strong> (+{selectedExperience === 'inexperienced' ? 7 : selectedExperience === 'regular' ? 10 : 13}pts each)
+              <strong>Additional Men:</strong> (+{
+                selectedExperience === 'inexperienced' ? unit.extraManCost['inexperienced'] || 0:
+                selectedExperience === 'regular' ? unit.extraManCost['regular'] :
+                unit.extraManCost['veteran']}
+                pts each)
             </label>
             <select
               id={`additional-men-${unit.id}`}
@@ -141,7 +151,11 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
             >
               {Array.from({ length: maxAdditionalMen + 1 }, (_, i) => (
                 <option key={i} value={i}>
-                  {i} additional men (+{i * (selectedExperience === 'inexperienced' ? 7 : selectedExperience === 'regular' ? 10 : 13)}pts)
+                  {i} additional men (+{i * (
+                    selectedExperience === 'inexperienced' ? unit.extraManCost['inexperienced'] || 0 :
+                    selectedExperience === 'regular' ? unit.extraManCost['regular'] :
+                    unit.extraManCost['veteran'])}
+                    pts)
                 </option>
               ))}
             </select>
