@@ -77,16 +77,13 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
   };
 
   const getMaxForOption = (option: UpgradeOptions): number => {
-    if (option.desc.includes('Browning Automatic Rifle')) {
-      return Math.min(option.max, unit.quantity + additionalMen);
-    }
-    if (option.desc.includes('anti-tank grenades')) {
-      return unit.quantity + additionalMen;
-    }
-    if (option.desc.includes('submachine gun')) {
-      return option.max;
-    }
-    return option.max;
+    let maximum: number = option.max;
+
+    if (option.max > unit.maxQuantity) {
+      maximum = unit.maxQuantity;
+    };
+
+    return maximum;
   };
 
   const availableExperiences = getAvailableExperiences();
@@ -128,7 +125,7 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
           </select>
         </div>
 
-{/*
+        {/*
         inexperienced: unit.extraManCost['inexperienced'] || 0,
       regular: unit.extraManCost['regular'],
       veteran: unit.extraManCost['veteran']
@@ -139,10 +136,10 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
           <div className="option-selector">
             <label htmlFor={`additional-men-${unit.id}`}>
               <strong>Additional Men:</strong> (+{
-                selectedExperience === 'inexperienced' ? unit.extraManCost['inexperienced'] || 0:
-                selectedExperience === 'regular' ? unit.extraManCost['regular'] :
-                unit.extraManCost['veteran']}
-                pts each)
+                selectedExperience === 'inexperienced' ? unit.extraManCost['inexperienced'] || 0 :
+                  selectedExperience === 'regular' ? unit.extraManCost['regular'] :
+                    unit.extraManCost['veteran']}
+              pts each)
             </label>
             <select
               id={`additional-men-${unit.id}`}
@@ -153,9 +150,9 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
                 <option key={i} value={i}>
                   {i} additional men (+{i * (
                     selectedExperience === 'inexperienced' ? unit.extraManCost['inexperienced'] || 0 :
-                    selectedExperience === 'regular' ? unit.extraManCost['regular'] :
-                    unit.extraManCost['veteran'])}
-                    pts)
+                      selectedExperience === 'regular' ? unit.extraManCost['regular'] :
+                        unit.extraManCost['veteran'])}
+                  pts)
                 </option>
               ))}
             </select>

@@ -102,18 +102,25 @@ export const sampleNations: Nation[] = [
                         `Add up to 6 men with rifles at +11pts each (Regular), or +14pts each (Veteran)`,
                         `The NCO and up to 2 men may replace their rifle with a submachine gun for +4pts each`,
                         `Up to 1 man may replace their rifle with an automatic rifle for +6pts`,
+                        `Up to 1 man may replace their rifle with a light machine gun for +15pts - another man becomes the loader`,
                         `The squad can be given anti-tank grenades for +2pts per figure`
                     ],
                     options: [
                         {
-                            desc: 'submachine gun for NCO',
+                            desc: 'submachine gun',
                             price: 4,
-                            max: 1,
+                            max: 3,
                             exprerienceLevel: 'all'
                         },
                         {
                             desc: 'Browning Automatic Rifle',
                             price: 6,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'Light machine gun',
+                            price: 15,
                             max: 1,
                             exprerienceLevel: 'all'
                         },
@@ -126,7 +133,300 @@ export const sampleNations: Nation[] = [
                     ]
                 },
                 specialRules: ['Stubborn', 'Tank Hunters (if anti-tank grenades taken)']
-            }
+            },
+            {
+                id: 'us3',
+                name: 'Sniper team',
+                type: 'Infantry',
+                baseCost: { regular: 52, veteran: 67 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 2,
+                maxQuantity: 2,
+                weapons: 'Sniper has a rifle, spotter has a pistol',
+                options:
+                {
+                    optionsDescription: [
+                        `Any figure can have a submachine gun in addition to their weapons for +6pts each`,
+                        `By Air, Land, and Sea: Airborne, Rangers, Marines`
+                    ],
+                    options: [
+                        {
+                            desc: 'additional submachine guns',
+                            price: 6,
+                            max: 2,
+                            exprerienceLevel: 'all'
+                        }
+                    ]
+                },
+                specialRules: [
+                    'Team weapon',
+                    `Sniper`,
+                    `Infiltrators`,
+                    `By Air, Land, and Sea (if taken)`
+                ]
+            },
+            {
+                id: 'us4',
+                name: 'Flamethrower team',
+                type: 'Infantry',
+                baseCost: { regular: 50, veteran: 65 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 2,
+                maxQuantity: 2,
+                weapons: '1 infantry flamethrower',
+                options:
+                {
+                    optionsDescription: [
+                        `By Air, Land, and Sea: Airborne, Rangers, Marines`
+                    ],
+                    options: [
+
+                    ]
+                },
+                specialRules: [
+                    'Team weapon',
+                    `Flamethrower`,
+                    `By Air, Land, and Sea (if taken)`
+                ]
+            },
+            {
+                id: 'us5',
+                name: 'Light mortar team',
+                type: 'Infantry',
+                baseCost: { inexperienced: 25, regular: 35, veteran: 46 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 3,
+                maxQuantity: 3,
+                weapons: '1 Light mortar',
+                options:
+                {
+                    optionsDescription: [
+                        `By Air, Land, and Sea: Airborne, Rangers, Marines`
+                    ],
+                    options: [
+
+                    ]
+                },
+                specialRules: [
+                    'Team weapon',
+                    `By Air, Land, and Sea (if taken)`
+                ]
+            },
+            {
+                id: 'us6',
+                name: 'M4A3 Sherman 75MM',
+                type: 'Tank',
+                baseCost: { inexperienced: 164, regular: 205, veteran: 246 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: '1 Turret-mounted medium anti-tank gun with co-axial MMG and 1 forward-facing hull-mounted MMG',
+                options:
+                {
+                    optionsDescription: [
+                        `Add a pintle-mounted MMG on the turret for +15pts`,
+                        `Upgrade the pintle-mounted MMG to a pintle-mounted HMG for +10pts`,
+                        `Cancel the ‘Easily Catches Fire’ rule for +5pts`,
+                    ],
+                    options: [
+                        {
+                            desc: 'Pintle MMG for turret',
+                            price: 15,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'Pintle MMG => HMG',
+                            price: 10,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'Cancel catch fire easily',
+                            price: 5,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        }
+                    ]
+                },
+                specialRules: [
+                    `Easily Catches Fire: If a roll on the vehicle damage table results in the vehicle catching fire, add D3 pin markers rather than just
+1 before taking the morale check.`,
+                    `Improved HE: instead of HE (1”) the medium anti-tank gun has HE (2”).`,
+                    `Gyro-Stabilisers (if taken as Veteran)`
+                ]
+            },
+            {
+                id: 'us7',
+                name: 'M4A3E8 Sherman 76MM',
+                type: 'Tank',
+                baseCost: { inexperienced: 180, regular: 225, veteran: 270 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: '1 Turret-mounted heavy anti-tank gun with co-axial MMG and 1 forward-facing hull-mounted MMG',
+                options:
+                {
+                    optionsDescription: [
+                        `Add a pintle-mounted MMG on the turret for +15pts`,
+                        `Upgrade the pintle-mounted MMG to a pintle-mounted HMG for +10pts`,
+                        `Add a Culin hedgerow cutter for +5pts`,
+                    ],
+                    options: [
+                        {
+                            desc: 'Pintle MMG for turret',
+                            price: 15,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'Pintle MMG => HMG',
+                            price: 10,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'Culin hedgerow cutter',
+                            price: 5,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        }
+                    ]
+                },
+                specialRules: [
+                    `Gyro-Stabilisers (if taken as Veteran)`
+                ]
+            },
+            {
+                id: 'us8',
+                name: 'M8 Greyhound',
+                type: 'Vehicle',
+                baseCost: { inexperienced: 84, regular: 105, veteran: 126 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: '1 Turret-mounted light anti-tank gun with coaxial MMG',
+                options:
+                {
+                    optionsDescription: [
+                        `May add a pintle-mounted HMG with a 360-degree arc of fire for +25pts`
+                    ],
+                    options: [
+                        {
+                            desc: 'Pintle HMG',
+                            price: 25,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        }
+                    ]
+                },
+                specialRules: [
+                    `Recce`,
+                    `Open-topped`
+                ]
+            },
+            {
+                id: 'us9',
+                name: 'M20 Scout car',
+                type: 'Vehicle',
+                baseCost: { inexperienced: 60, regular: 75, veteran: 90 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: '1 Pintle-mounted HMG with a 360-degree arc of fire',
+                options:
+                {
+                    optionsDescription: [
+                        `May be upgraded to Command Vehicle for +10pts`
+                    ],
+                    options: [
+                        {
+                            desc: 'Command vehicle',
+                            price: 10,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        }
+                    ]
+                },
+                specialRules: [
+                    `Recce`,
+                    `Open-topped`,
+                    `Command Vehicle (if option is taken)`
+                ]
+            },
+            {
+                id: 'us10',
+                name: 'Reconnaisance Jeep',
+                type: 'Vehicle',
+                baseCost: { inexperienced: 36, regular: 45, veteran: 54 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: '1 pintle-mounted MMG with a 360-degree arc of fire',
+                options:
+                {
+                    optionsDescription: [
+
+                    ],
+                    options: [
+
+                    ]
+                },
+                specialRules: [
+                    `Recce`
+                ]
+            },
+            {
+                id: 'us11',
+                name: 'M3 Half-track',
+                type: 'Vehicle',
+                baseCost: { inexperienced: 62, regular: 77, veteran: 92 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: '1 Pintle mounted HMG with a 360-degree arc of fire',
+                options:
+                {
+                    optionsDescription: [
+                        `May add up to three additional pintle-mounted MMGs (one covering the left arc, one covering the right arc and one covering
+the rear arc) for +15pts each`,
+                        `Transports 12 men`
+                    ],
+                    options: [
+                        {
+                            desc: '3 additional pintle MMG (left, right, back)',
+                            price: 15,
+                            max: 3,
+                            exprerienceLevel: 'all'
+                        }
+                    ]
+                },
+                specialRules: [
+                    `Open-topped`
+                ]
+            },
+            {
+                id: 'us12',
+                name: 'Jeep',
+                type: 'Vehicle',
+                baseCost: { inexperienced: 14, regular: 18, veteran: 22 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 1,
+                maxQuantity: 1,
+                weapons: 'No weapons, can transport 3 men and tow some guns',
+                options:
+                {
+                    optionsDescription: [
+
+                    ],
+                    options: [
+
+                    ]
+                },
+                specialRules: [
+
+                ]
+            },
         ]
     },
     {
