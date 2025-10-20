@@ -1,6 +1,6 @@
 //import { useState } from 'react'
 import './App.css'
-import { sampleNations } from './armies/armies.ts'
+import { armiesOfNation } from './armies/armies.ts'
 import ArmyBuilder from './components/ArmyBuilder.tsx'
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
         <h1>Bolt Action Army Planner</h1>
       </header>
       <main>
-        <ArmyBuilder nations={sampleNations} />
+        <ArmyBuilder nations={armiesOfNation} />
       </main>
     </div>
   )
