@@ -1,7 +1,7 @@
 export interface UnitCost {
   inexperienced?: number;
-  regular: number;
-  veteran: number;
+  regular?: number;
+  veteran?: number;
 }
 
 export interface UpgradeOptions {
