@@ -43,8 +43,8 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
     // Calculate cost per additional man based on experience
     const costPerMan: Record<ExperienceLevel, number> = {
       inexperienced: unit.extraManCost['inexperienced'] || 0,
-      regular: unit.extraManCost['regular'],
-      veteran: unit.extraManCost['veteran']
+      regular: unit.extraManCost['regular'] || 0,
+      veteran: unit.extraManCost['veteran'] || 0
     };
     return additionalMen * costPerMan[selectedExperience];
   };
@@ -150,8 +150,8 @@ const UnitCard: React.FC<UnitCardProps> = ({ unit, onAddToArmy }) => {
                 <option key={i} value={i}>
                   {i} additional men (+{i * (
                     selectedExperience === 'inexperienced' ? unit.extraManCost['inexperienced'] || 0 :
-                      selectedExperience === 'regular' ? unit.extraManCost['regular'] :
-                        unit.extraManCost['veteran'])}
+                      selectedExperience === 'regular' ? unit.extraManCost['regular'] || 0 :
+                        unit.extraManCost['veteran'] || 0 )}
                   pts)
                 </option>
               ))}
