@@ -21,6 +21,10 @@ function App() {
     setUsername('');
   }
 
+  console.log('X ', token);
+  setModeOfUse('dev');
+  setMessage('');
+
   return (
     <div className="App">
 
