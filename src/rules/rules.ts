@@ -1,4 +1,3 @@
-import UnitCard from "../components/UnitCard";
 
 export interface UnitRule {
     name: string;
