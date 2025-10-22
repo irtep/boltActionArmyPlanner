@@ -1,3 +1,5 @@
+import type { ArmyUnitExtended } from "../components/ArmyBuilder";
+
 export interface UnitCost {
   inexperienced?: number;
   regular?: number;
@@ -45,10 +47,11 @@ export interface UnitUpgrade {
 */
 export interface ArmyList {
   id: string;
+  userId: string;
   name: string;
   nation: string;
   pointsLimit: number;
-  units: ArmyUnit[];
+  units: ArmyUnitExtended[];
   totalPoints: number;
 }
 
@@ -56,4 +59,21 @@ export interface Nation {
   id: string;
   name: string;
   availableUnits: ArmyUnit[];
+}
+
+// For API requests
+export interface CreateArmyRequest {
+  name: string;
+  nation: string;
+  pointsLimit: number;
+  units: ArmyUnit[];
+  totalPoints: number;
+}
+
+export interface UpdateArmyRequest {
+  name?: string;
+  nation?: string;
+  pointsLimit?: number;
+  units?: ArmyUnit[];
+  totalPoints?: number;
 }

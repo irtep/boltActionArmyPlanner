@@ -4,10 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import type { NavigateFunction } from 'react-router-dom';
 
 interface UserDetails {
+  id: string;
   token: string;
-  username: string;
-  admin: boolean;
-  testAccount: boolean;
+  username: string
 }
 
 interface LoginFormElements extends HTMLFormControlsCollection {
@@ -20,19 +19,20 @@ interface LoginFormElement extends HTMLFormElement {
 }
 
 interface LoginResponse {
+  id: string;
   token: string;
   admin: boolean;
   testAccount: boolean;
 }
 
 interface LocalProps {
+    setUserId: React.Dispatch<React.SetStateAction<string>>;
     setToken: React.Dispatch<React.SetStateAction<string>>;
     setUsername: React.Dispatch<React.SetStateAction<string>>;
-    //setAdmin: React.Dispatch<React.SetStateAction<boolean>>;
     modeOfUse: 'dev' | 'prod';
 }
 
-const Login: React.FC<LocalProps> = ({ setToken, setUsername, /*setAdmin, */ modeOfUse }): React.ReactElement => {
+const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfUse }): React.ReactElement => {
   const [msg, setMsg] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -45,15 +45,14 @@ const Login: React.FC<LocalProps> = ({ setToken, setUsername, /*setAdmin, */ mod
 
   const handleLoginSuccess = (response: LoginResponse, username: string): void => {
     const userDetails: UserDetails = {
+      id: response.id,
       token: response.token,
-      username,
-      admin: response.admin,
-      testAccount: response.testAccount
+      username
     };
 
+    setUserId(response.id);
     setToken(response.token);
     setUsername(username);
-    //setAdmin(response.admin);
 
     localStorage.setItem("uDetails", JSON.stringify(userDetails));
     navigate("/");
