@@ -108,8 +108,8 @@ const Register: React.FC = (): React.ReactElement => {
       }
 
       const url: string = modeOfUse === "dev" 
-        ? "http://localhost:5509/api/users" 
-        : "/api/users";
+        ? "http://localhost:5509/api/auth/register" 
+        : "/api/auth/register";
 
       const requestBody: RegisterRequest = {
         username: username.trim(),
