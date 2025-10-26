@@ -10,9 +10,10 @@ interface ArmyBuilderProps {
   modeOfUse: 'dev' | 'prod';
   nations: Nation[];
   selectedNation: Nation | null;
-  setSelectedNation: React.Dispatch<React.SetStateAction<Nation | null>>
+  setSelectedNation: React.Dispatch<React.SetStateAction<Nation | null>>;
   army: ArmyListWithUnits;
-  setArmy: React.Dispatch<React.SetStateAction<ArmyListWithUnits>>
+  setArmy: React.Dispatch<React.SetStateAction<ArmyListWithUnits>>;
+  token: string;
 }
 
 // Define a type for experience levels
@@ -37,7 +38,9 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({
   selectedNation,
   setSelectedNation,
   army,
-  setArmy }) => {
+  setArmy,
+  token
+}) => {
 
   const generateId = (): string => {
     return `unit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -140,6 +143,7 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({
         currentArmy={army}
         setArmy={setArmy}
         modeOfUse={modeOfUse}
+        token={token}
       />
 
       {/* Army Name and Points Limit Inputs */}

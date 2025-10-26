@@ -24,11 +24,13 @@ interface ArmyManagerProps {
   currentArmy: ArmyListWithUnits | null;
   setArmy: React.Dispatch<React.SetStateAction<ArmyListWithUnits>>
   modeOfUse: 'dev' | 'prod';
+  token: string;
 }
 
 const ArmyManager: React.FC<ArmyManagerProps> = ({ 
   username, 
-  userId, 
+  userId,
+  token,
   currentArmy, 
   setArmy, 
   modeOfUse 
@@ -53,7 +55,6 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setError('');
     
     try {
-      const token = localStorage.getItem('token');
       const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
       
       const response = await fetch(`${baseUrl}/api/armies`, {
@@ -95,11 +96,10 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
       const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
       
       let response: Response;
-      
+      /*
       if (currentArmy.id) {
         // Update existing army
         response = await fetch(`${baseUrl}/api/armies/${currentArmy.id}`, {
@@ -116,7 +116,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             totalPoints: currentArmy.totalPoints
           })
         });
-      } else {
+      } else { */
         // Create new army
         response = await fetch(`${baseUrl}/api/armies`, {
           method: 'POST',
@@ -132,7 +132,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             totalPoints: currentArmy.totalPoints
           })
         });
-      }
+      //}
 
       if (response.ok) {
         setSaveDialogOpen(false);
@@ -168,7 +168,6 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setLoading(true);
     
     try {
-      const token = localStorage.getItem('token');
       const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
       
       const response = await fetch(`${baseUrl}/api/armies/${armyId}`, {
@@ -218,7 +217,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             disabled={loading}
             sx={{ mb: 2 }}
           >
-            {currentArmy.id ? 'Update Army' : 'Save Army'}
+            save army
           </Button>
         )}
 
@@ -262,7 +261,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
 
       <Dialog open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)}>
         <DialogTitle>
-          {currentArmy?.id ? 'Update Army' : 'Save Army'}
+          save army
         </DialogTitle>
         <DialogContent>
           <TextField
@@ -288,7 +287,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             disabled={!armyName.trim() || loading}
             variant="contained"
           >
-            {loading ? 'Saving...' : (currentArmy?.id ? 'Update' : 'Save')}
+            {loading ? 'Saving...' : 'Save'}
           </Button>
         </DialogActions>
       </Dialog>

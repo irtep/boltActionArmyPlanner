@@ -57,6 +57,7 @@ function App() {
           setSelectedNation={setSelectedNation}
           army={army}
           setArmy={setArmy}
+          token={token}
         />} />
         <Route path="/login" element={<Login
           setUserId={setUserId}
