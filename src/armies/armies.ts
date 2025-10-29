@@ -148,17 +148,17 @@ export const armiesOfNation: Nation[] = [
                 extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
                 quantity: 2,
                 maxQuantity: 2,
-                weapons: 'Sniper has a rifle, spotter has a pistol',
+                weapons: 'Rifles and pistols',
                 options:
                 {
                     optionsDescription: [
-                        `Any figure can have a submachine gun in addition to their weapons for +6pts each`,
+                        `can change pistol for submachine gun for +5 each`,
                         `By Air, Land, and Sea: Airborne, Rangers, Marines`
                     ],
                     options: [
                         {
-                            desc: 'additional submachine guns',
-                            price: 6,
+                            desc: 'Submachine guns',
+                            price: 5,
                             max: 2,
                             exprerienceLevel: 'all'
                         }
@@ -372,10 +372,15 @@ export const armiesOfNation: Nation[] = [
                 options:
                 {
                     optionsDescription: [
-
+                        `May change MMG for HMG for +10p`
                     ],
                     options: [
-
+                        {
+                            desc: 'HMG',
+                            price: 10,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        }
                     ]
                 },
                 specialRules: [
@@ -436,10 +441,10 @@ the rear arc) for +15pts each`,
         ]
     },
     /**
-     * 
+     * ------------------------------------------
      * 
      *    GERMANY
-     * 
+     * ------------------------------------------
      */
     {
         id: '1',
@@ -469,6 +474,12 @@ the rear arc) for +15pts each`,
                             desc: 'submachine guns',
                             price: 4,
                             max: 6,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'assault rifle',
+                            price: 6,
+                            max: 1,
                             exprerienceLevel: 'all'
                         },
                         {
@@ -661,7 +672,8 @@ the rear arc) for +15pts each`,
                         `The NCO and up to 6 men may replace their rifles with submachine guns for +4pts each`,
                         `The NCO and up to 6 men may replace their rifles with assault rifles for +6pts each`,
                         `Up to 2 men may replace their rifle with a light machine gun for +15pts each - for each light machine gun included another man becomes the loader.`,
-                        `Up to 4 men may have a panzerfaust in addition to other weapons for +15pts each`
+                        `Up to 4 men may have a panzerfaust in addition to other weapons for +15pts each`,
+                        `anti-tank grenades, +2pts per model`
                     ],
                     options: [
                         {
@@ -686,6 +698,12 @@ the rear arc) for +15pts each`,
                             desc: 'Panzerfaust',
                             price: 15,
                             max: 4,
+                            exprerienceLevel: 'all'
+                        },
+                        {
+                            desc: 'Anti-tank grenades',
+                            price: 2,
+                            max: 10,
                             exprerienceLevel: 'all'
                         }
                     ]
@@ -985,30 +1003,3 @@ the rear arc) for +15pts each`,
         ]
     }
 ];
-
-/*
-export interface UpgradeOptions {
-  desc: string;
-  price: number;
-  max: number;
-  exprerienceLevel: 'inexperienced' | 'regular' |'veteran' | 'all';
-}
-
-export interface UnitOptions {
-  optionsDescription: string[];
-  options: UpgradeOptions[];
-}
-
-export interface ArmyUnit {
-  id: string;
-  name: string;
-  type: 'Infantry' | 'Artillery' | 'Vehicle' | 'Team' | 'Tank';
-  cost: UnitCost;
-  quantity: number; // also minimum quantity
-  maxQuantity: number;
-  weapons: string;
-  specialRules: string[];
-  options: UnitOptions[];
-  experience?: keyof UnitCost;
-}
-*/

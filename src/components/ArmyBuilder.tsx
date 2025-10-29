@@ -144,6 +144,7 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({
         setArmy={setArmy}
         modeOfUse={modeOfUse}
         token={token}
+        selectedNation={selectedNation}
       />
 
       {/* Army Name and Points Limit Inputs */}

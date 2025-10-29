@@ -18,11 +18,15 @@ interface LoginFormElement extends HTMLFormElement {
   readonly elements: LoginFormElements;
 }
 
+interface UserResponse {
+  id: number;
+  username: string;
+  created_at: string;
+};
+
 interface LoginResponse {
-  id: string;
   token: string;
-  admin: boolean;
-  testAccount: boolean;
+  user: UserResponse;
 }
 
 interface LocalProps {
@@ -43,16 +47,16 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
     setTimeout(() => setMsg(''), 10000);
   };
 
-  const handleLoginSuccess = (response: LoginResponse, username: string): void => {
+  const handleLoginSuccess = (response: LoginResponse): void => {
     const userDetails: UserDetails = {
-      id: response.id,
+      id: String(response.user.id),
       token: response.token,
-      username
+      username: response.user.username
     };
-
-    setUserId(response.id);
+    console.log('handling: ', response.user.id, response.token);
+    setUserId(String(response.user.id));
     setToken(response.token);
-    setUsername(username);
+    setUsername(response.user.username);
 
     localStorage.setItem("uDetails", JSON.stringify(userDetails));
     navigate("/");
@@ -99,7 +103,7 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
       if (connection.ok) {
         const response: LoginResponse = await connection.json();
         console.log('Login response:', response);
-        handleLoginSuccess(response, username);
+        handleLoginSuccess(response);
       } else {
         handleLoginError(connection.status);
       }

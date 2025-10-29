@@ -35,11 +35,15 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('token ', token);
+    //console.log('token ', token);
     setModeOfUse('dev');
     setMessage('');
   }, []);
-
+/*
+  useEffect( () => {
+    console.log('user: ', userId, username, token);
+  });
+*/
   return (
     <div className="App">
       <Header

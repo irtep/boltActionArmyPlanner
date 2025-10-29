@@ -1,21 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Box, 
-  Button, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions, 
-  TextField, 
-  List, 
-  ListItem, 
-  ListItemButton, 
-  ListItemText, 
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
   Typography,
   Paper,
   Alert
 } from '@mui/material';
-import type { ArmyList } from '../types/army'; // Import from shared types
+import type { ArmyList, Nation } from '../types/army'; // Import from shared types
 import type { ArmyListWithUnits } from './ArmyBuilder';
 
 interface ArmyManagerProps {
@@ -25,15 +25,17 @@ interface ArmyManagerProps {
   setArmy: React.Dispatch<React.SetStateAction<ArmyListWithUnits>>
   modeOfUse: 'dev' | 'prod';
   token: string;
+  selectedNation: Nation | null;
 }
 
-const ArmyManager: React.FC<ArmyManagerProps> = ({ 
-  username, 
+const ArmyManager: React.FC<ArmyManagerProps> = ({
+  username,
   userId,
   token,
-  currentArmy, 
-  setArmy, 
-  modeOfUse 
+  currentArmy,
+  setArmy,
+  modeOfUse,
+  selectedNation
 }) => {
   const [savedArmies, setSavedArmies] = useState<ArmyList[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -41,22 +43,15 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
   const [saveDialogOpen, setSaveDialogOpen] = useState<boolean>(false);
   const [armyName, setArmyName] = useState<string>('');
 
-  // Fetch armies on component mount and when userId changes
-  useEffect(() => {
-    if (userId) {
-      fetchArmies();
-    }
-  }, [userId]);
-
   const fetchArmies = async (): Promise<void> => {
     if (!userId) return;
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
-      
+
       const response = await fetch(`${baseUrl}/api/armies`, {
         headers: {
           'Authorization': `Bearer ${token}`
@@ -86,7 +81,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setSaveDialogOpen(true);
   };
 
-  const handleSaveArmy = async (): Promise<void> => {
+  const handleSaveArmy = async (action: 'saveNew' | 'update'): Promise<void> => {
     if (!currentArmy || !armyName.trim()) {
       setError('Army name is required');
       return;
@@ -97,10 +92,10 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
 
     try {
       const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
-      
+
       let response: Response;
-      /*
-      if (currentArmy.id) {
+
+      if (action === 'update') {
         // Update existing army
         response = await fetch(`${baseUrl}/api/armies/${currentArmy.id}`, {
           method: 'PUT',
@@ -116,7 +111,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             totalPoints: currentArmy.totalPoints
           })
         });
-      } else { */
+      } else {
         // Create new army
         response = await fetch(`${baseUrl}/api/armies`, {
           method: 'POST',
@@ -125,25 +120,26 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
+            userId: userId,
             name: armyName.trim(),
-            nation: currentArmy.nation,
+            nation: selectedNation?.name,
             pointsLimit: currentArmy.pointsLimit,
             units: currentArmy.units, // Direct usage - types match!
             totalPoints: currentArmy.totalPoints
           })
         });
-      //}
+      }
 
       if (response.ok) {
         setSaveDialogOpen(false);
         setArmyName('');
         fetchArmies();
-        
+
         // If it was a new army, update the current army with the ID from response
         if (!currentArmy.id) {
           const result = await response.json();
-          setArmy({ 
-            ...currentArmy, 
+          setArmy({
+            ...currentArmy,
             id: result.armyId,
             name: armyName.trim()
           });
@@ -166,10 +162,10 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     }
 
     setLoading(true);
-    
+
     try {
       const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
-      
+
       const response = await fetch(`${baseUrl}/api/armies/${armyId}`, {
         method: 'DELETE',
         headers: {
@@ -193,6 +189,19 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     }
   };
 
+  // Fetch armies on component mount and when userId changes
+  useEffect(() => {
+    if (userId) {
+      //console.log('userId change: fetch armies:');
+      fetchArmies();
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    console.log('currentArmy: ', currentArmy);
+    console.log('saved armies: ', savedArmies);
+  }, [savedArmies, currentArmy]);
+
   if (!username) {
     return null;
   }
@@ -211,8 +220,8 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
         )}
 
         {currentArmy && (
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleSaveClick}
             disabled={loading}
             sx={{ mb: 2 }}
@@ -230,12 +239,12 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
         ) : (
           <List>
             {savedArmies.map((army) => (
-              <ListItem 
-                key={army.id} 
+              <ListItem
+                key={army.id}
                 disablePadding
                 secondaryAction={
-                  <Button 
-                    color="error" 
+                  <Button
+                    color="error"
                     size="small"
                     onClick={() => handleDeleteArmy(army.id)}
                     disabled={loading}
@@ -244,11 +253,11 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
                   </Button>
                 }
               >
-                <ListItemButton 
+                <ListItemButton
                   onClick={() => handleLoadArmy(army)}
                   selected={currentArmy?.id === army.id}
                 >
-                  <ListItemText 
+                  <ListItemText
                     primary={army.name}
                     secondary={`${army.nation} - ${army.totalPoints}/${army.pointsLimit} pts - ${army.units.length} units`}
                   />
@@ -273,21 +282,41 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             variant="outlined"
             value={armyName}
             onChange={(e) => setArmyName(e.target.value)}
-            onKeyPress={(e) => {
+            onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                handleSaveArmy();
+                handleSaveArmy('saveNew');
               }
             }}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
-          <Button 
-            onClick={handleSaveArmy} 
+          <Button
+            onClick={() => {
+              handleSaveArmy('saveNew');
+            }}
             disabled={!armyName.trim() || loading}
             variant="contained"
           >
             {loading ? 'Saving...' : 'Save'}
+          </Button>
+          <Button
+            onClick={() => {
+              handleSaveArmy('saveNew');
+            }}
+            disabled={!armyName.trim() || loading}
+            variant="contained"
+          >
+            {loading ? 'Saving...' : 'Save'}
+          </Button>
+          <Button
+            onClick={() => {
+              handleSaveArmy('update');
+            }}
+            disabled={!armyName.trim() || loading}
+            variant="contained"
+          >
+            {loading ? 'Saving...' : 'update existing'}
           </Button>
         </DialogActions>
       </Dialog>
