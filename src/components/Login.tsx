@@ -64,9 +64,9 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
 
   const handleLoginError = (status: number): void => {
     if (status === 401) {
-      setMsg('Käyttäjänimi tai salasana väärin');
+      setMsg('Incorrect username or password.');
     } else {
-      setMsg(`Tarkista, onko palvelin päällä. Virhekoodi: ${status}`);
+      setMsg(`Check if the server is online. Error code: ${status}`);
     }
     clearMessage();
   };
@@ -83,7 +83,7 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
       const password = form.elements.password.value;
 
       if (!username || !password) {
-        setMsg('Täytä molemmat kentät');
+        setMsg('fill both fields');
         clearMessage();
         return;
       }
@@ -109,7 +109,7 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
       }
     } catch (error) {
       console.error('Login error:', error);
-      setMsg('Verkkovirhe. Tarkista yhteys.');
+      setMsg('Network error. Check connection.');
       clearMessage();
     } finally {
       setIsLoading(false);
@@ -134,10 +134,10 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
           }}
         >
           <Stack spacing={2}>
-            <Typography variant="h6">Kirjaudu sisään</Typography>
+            <Typography variant="h6">Log in</Typography>
             
             <TextField 
-              label="Käyttäjätunnus" 
+              label="Username" 
               name="username"
               disabled={isLoading}
               required
@@ -145,7 +145,7 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
             />
             
             <TextField 
-              label="Salasana"
+              label="Password"
               name="password"
               type="password"
               disabled={isLoading}
@@ -160,7 +160,7 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
               disabled={isLoading}
               fullWidth
             >
-              {isLoading ? 'Kirjaudutaan...' : 'Kirjaudu'}
+              {isLoading ? 'logging in...' : 'Log in'}
             </Button>
 
             <Button 
