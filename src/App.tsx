@@ -10,6 +10,16 @@ import Header from './components/Header.tsx';
 import Footer from './components/Footer.tsx';
 import type { Nation } from './types/army.ts';
 
+const defaultArmy: ArmyListWithUnits = {
+  id: '1',
+  userId: '',
+  name: 'My Army',
+  nation: '',
+  pointsLimit: 1000,
+  units: [],
+  totalPoints: 0
+};
+
 function App() {
   const [userId, setUserId] = useState<string>('');
   const [token, setToken] = useState<string>('');
@@ -18,20 +28,14 @@ function App() {
   const [modeOfUse, setModeOfUse] = useState<'dev' | 'prod'>('dev');
   const [message, setMessage] = useState<string>('');
   const [selectedNation, setSelectedNation] = useState<Nation | null>(null);
-  const [army, setArmy] = useState<ArmyListWithUnits>({
-    id: '1',
-    userId: '',
-    name: 'My Army',
-    nation: '',
-    pointsLimit: 1000,
-    units: [],
-    totalPoints: 0
-  });
+  const [army, setArmy] = useState<ArmyListWithUnits>(defaultArmy);
 
   const logUserOut = () => {
     setUserId('');
     setToken('');
     setUsername('');
+    setArmy(defaultArmy);
+    setSelectedNation(null);
   }
 
   useEffect(() => {
@@ -39,11 +43,11 @@ function App() {
     setModeOfUse('dev');
     setMessage('');
   }, []);
-/*
-  useEffect( () => {
-    console.log('user: ', userId, username, token);
-  });
-*/
+  /*
+    useEffect( () => {
+      console.log('user: ', userId, username, token);
+    });
+  */
   return (
     <div className="App">
       <Header

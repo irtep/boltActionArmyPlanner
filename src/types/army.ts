@@ -37,14 +37,7 @@ export interface ArmyUnit {
   experience?: keyof UnitCost;
   selectedOptions?: SelectedOptions;
 }
-/*
-export interface UnitUpgrade {
-  id: string;
-  name: string;
-  cost: UnitCost;
-  description: string;
-}
-*/
+
 export interface ArmyList {
   id: string;
   userId: string;

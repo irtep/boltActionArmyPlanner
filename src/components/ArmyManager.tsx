@@ -2,11 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
   List,
   ListItem,
   ListItemButton,
@@ -15,7 +10,7 @@ import {
   Paper,
   Alert
 } from '@mui/material';
-import type { ArmyList, Nation } from '../types/army'; // Import from shared types
+import type { ArmyList, Nation } from '../types/army';
 import type { ArmyListWithUnits } from './ArmyBuilder';
 
 interface ArmyManagerProps {
@@ -40,8 +35,6 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
   const [savedArmies, setSavedArmies] = useState<ArmyList[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>('');
-  const [saveDialogOpen, setSaveDialogOpen] = useState<boolean>(false);
-  const [armyName, setArmyName] = useState<string>('');
 
   const fetchArmies = async (): Promise<void> => {
     if (!userId) return;
@@ -76,13 +69,9 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setArmy(army);
   };
 
-  const handleSaveClick = (): void => {
-    setArmyName(currentArmy?.name || '');
-    setSaveDialogOpen(true);
-  };
-
   const handleSaveArmy = async (action: 'saveNew' | 'update'): Promise<void> => {
-    if (!currentArmy || !armyName.trim()) {
+
+    if (!currentArmy) {
       setError('Army name is required');
       return;
     }
@@ -96,7 +85,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
       let response: Response;
 
       if (action === 'update') {
-        // Update existing army
+
         response = await fetch(`${baseUrl}/api/armies/${currentArmy.id}`, {
           method: 'PUT',
           headers: {
@@ -104,10 +93,10 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
             'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
-            name: armyName.trim(),
+            name: currentArmy.name.trim(),
             nation: currentArmy.nation,
             pointsLimit: currentArmy.pointsLimit,
-            units: currentArmy.units, // Direct usage - types match!
+            units: currentArmy.units,
             totalPoints: currentArmy.totalPoints
           })
         });
@@ -121,27 +110,24 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
           },
           body: JSON.stringify({
             userId: userId,
-            name: armyName.trim(),
+            name: currentArmy.name.trim(),
             nation: selectedNation?.name,
             pointsLimit: currentArmy.pointsLimit,
-            units: currentArmy.units, // Direct usage - types match!
+            units: currentArmy.units,
             totalPoints: currentArmy.totalPoints
           })
         });
       }
 
       if (response.ok) {
-        setSaveDialogOpen(false);
-        setArmyName('');
         fetchArmies();
 
-        // If it was a new army, update the current army with the ID from response
         if (!currentArmy.id) {
           const result = await response.json();
           setArmy({
             ...currentArmy,
             id: result.armyId,
-            name: armyName.trim()
+            name: currentArmy.name.trim()
           });
         }
       } else {
@@ -189,18 +175,11 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     }
   };
 
-  // Fetch armies on component mount and when userId changes
   useEffect(() => {
     if (userId) {
-      //console.log('userId change: fetch armies:');
       fetchArmies();
     }
   }, [userId]);
-
-  useEffect(() => {
-    console.log('currentArmy: ', currentArmy);
-    console.log('saved armies: ', savedArmies);
-  }, [savedArmies, currentArmy]);
 
   if (!username) {
     return null;
@@ -222,13 +201,32 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
         {currentArmy && (
           <Button
             variant="contained"
-            onClick={handleSaveClick}
+            onClick={() => {
+              handleSaveArmy('saveNew');
+            }}
             disabled={loading}
             sx={{ mb: 2 }}
           >
             save army
           </Button>
         )}
+
+        {
+          savedArmies.some(savedArmy => savedArmy.id === currentArmy?.id)
+            ? (
+              <Button
+                onClick={() => {
+                  handleSaveArmy('update');
+                }}
+                disabled={loading}
+                variant="contained"
+                sx={{ mb: 2 }}
+              >
+                {loading ? 'updating...' : 'update existing'}
+              </Button>
+            )
+            : null
+        }
 
         {loading ? (
           <Typography>Loading armies...</Typography>
@@ -267,59 +265,6 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
           </List>
         )}
       </Paper>
-
-      <Dialog open={saveDialogOpen} onClose={() => setSaveDialogOpen(false)}>
-        <DialogTitle>
-          save army
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Army Name"
-            type="text"
-            fullWidth
-            variant="outlined"
-            value={armyName}
-            onChange={(e) => setArmyName(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                handleSaveArmy('saveNew');
-              }
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setSaveDialogOpen(false)}>Cancel</Button>
-          <Button
-            onClick={() => {
-              handleSaveArmy('saveNew');
-            }}
-            disabled={!armyName.trim() || loading}
-            variant="contained"
-          >
-            {loading ? 'Saving...' : 'Save'}
-          </Button>
-          <Button
-            onClick={() => {
-              handleSaveArmy('saveNew');
-            }}
-            disabled={!armyName.trim() || loading}
-            variant="contained"
-          >
-            {loading ? 'Saving...' : 'Save'}
-          </Button>
-          <Button
-            onClick={() => {
-              handleSaveArmy('update');
-            }}
-            disabled={!armyName.trim() || loading}
-            variant="contained"
-          >
-            {loading ? 'Saving...' : 'update existing'}
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };
