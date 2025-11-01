@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
-import { TextField, Box } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { TextField, Box, Typography } from '@mui/material';
 import type { ArmyList, ArmyUnit, Nation, SelectedOptions, UnitCost } from '../types/army';
 import UnitCard from './UnitCard';
 import ArmyManager from './ArmyManager';
+import ShowArmyList from './ShowArmyList';
+import { Collapse, IconButton } from '@mui/material';
+import { ExpandMore, ExpandLess } from '@mui/icons-material';
 
 interface ArmyBuilderProps {
   username: string;
@@ -17,7 +20,7 @@ interface ArmyBuilderProps {
 }
 
 // Define a type for experience levels
-type ExperienceLevel = keyof UnitCost;
+export type ExperienceLevel = keyof UnitCost;
 
 // Extended Unit type that includes experience
 export interface ArmyUnitExtended extends ArmyUnit {
@@ -41,6 +44,20 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({
   setArmy,
   token
 }) => {
+
+  const [expandedUnits, setExpandedUnits] = useState<Set<string>>(new Set());
+
+  const toggleUnit = (unitId: string) => {
+    setExpandedUnits(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(unitId)) {
+        newSet.delete(unitId);
+      } else {
+        newSet.add(unitId);
+      }
+      return newSet;
+    });
+  };
 
   const generateId = (): string => {
     return `unit-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -100,18 +117,6 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({
       }));
     } else {
       alert('Not enough points remaining!');
-    }
-  };
-
-  const removeUnitFromArmy = (unitId: string) => {
-    const unit = army.units.find(u => u.uniqueId === unitId);
-    if (unit) {
-      const unitTotalCost = calculateUnitTotalCost(unit);
-      setArmy(prev => ({
-        ...prev,
-        units: prev.units.filter(u => u.uniqueId !== unitId),
-        totalPoints: prev.totalPoints - unitTotalCost
-      }));
     }
   };
 
@@ -187,43 +192,55 @@ const ArmyBuilder: React.FC<ArmyBuilderProps> = ({
         </select>
       </div>
 
-      <div className="builder-layout">
-        <div className="unit-selection">
-          <h3>Available Units</h3>
-          {selectedNation ? (
-            <div className="unit-grid">
-              {selectedNation.availableUnits.map(unit => (
-                <UnitCard
-                  key={unit.id}
-                  unit={unit}
-                  onAddToArmy={addUnitToArmy}
-                />
-              ))}
-            </div>
-          ) : (
-            <p>Please select a nation first</p>
-          )}
-        </div>
-
-        <div className="army-list">
-          <h3>My Army ({army.totalPoints}/{army.pointsLimit} points)</h3>
-          <div className="army-units">
-            {army.units.map((unit: ArmyUnitExtended) => {
-              const totalCost = calculateUnitTotalCost(unit);
-              return (
-                <div key={unit.uniqueId} className="army-unit">
-                  <span>
-                    {unit.name} ({unit.experience}) - {totalCost}pts
-                    {unit.selectedOptions.additionalMen > 0 && ` +${unit.selectedOptions.additionalMen} men`}
-                    {Object.values(unit.selectedOptions.upgrades).some(qty => qty > 0) && ` +upgrades`}
-                  </span>
-                  <button onClick={() => removeUnitFromArmy(unit.uniqueId)}>Remove</button>
+      <h3>Available Units</h3>
+      {selectedNation ? (
+        <div className="builder-layout">
+          <div className="unit-categories">
+            {Object.entries(
+              selectedNation.availableUnits.reduce((acc, unit) => {
+                if (!acc[unit.type]) {
+                  acc[unit.type] = [];
+                }
+                acc[unit.type].push(unit);
+                return acc;
+              }, {} as Record<string, typeof selectedNation.availableUnits>)
+            ).map(([type, units]) => (
+              <div key={type} className="unit-category">
+                <h4 className="category-header">{type}</h4>
+                <div className="unit-list">
+                  {units.map((unit: any, i: number) => (
+                    <div key={`${unit.name} ${i}`} className="unit-item">
+                      <div className="unit-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0' }}>
+                        <Typography>{unit.name}</Typography>
+                        <IconButton
+                          size="small"
+                          onClick={() => toggleUnit(unit.id)}
+                        >
+                          {expandedUnits.has(unit.id) ? <ExpandLess /> : <ExpandMore />}
+                        </IconButton>
+                      </div>
+                      <Collapse in={expandedUnits.has(unit.id)}>
+                        <UnitCard
+                          key={unit.id}
+                          unit={unit}
+                          onAddToArmy={addUnitToArmy}
+                        />
+                      </Collapse>
+                    </div>
+                  ))}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
+          <ShowArmyList
+            setArmy={setArmy}
+            army={army}
+          />
         </div>
-      </div>
+      ) : (
+        <p>Please select a nation first</p>
+      )}
+
     </div>
   );
 };
