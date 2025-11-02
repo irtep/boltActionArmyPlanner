@@ -43,7 +43,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setError('');
 
     try {
-      const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
+      const baseUrl = modeOfUse === 'dev' ? 'https://localhost:5509' : 'https://193.28.89.151:5509';
 
       const response = await fetch(`${baseUrl}/api/armies`, {
         headers: {
@@ -80,7 +80,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setError('');
 
     try {
-      const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
+      const baseUrl = modeOfUse === 'dev' ? 'https://localhost:5509' : 'https://193.28.89.151:5509';
 
       let response: Response;
 
@@ -150,7 +150,7 @@ const ArmyManager: React.FC<ArmyManagerProps> = ({
     setLoading(true);
 
     try {
-      const baseUrl = modeOfUse === 'dev' ? 'http://localhost:5509' : '';
+      const baseUrl = modeOfUse === 'dev' ? 'https://localhost:5509' : 'https://193.28.89.151:5509';
 
       const response = await fetch(`${baseUrl}/api/armies/${armyId}`, {
         method: 'DELETE',

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import './App.css'
 import { armiesOfNation } from './armies/armies.ts';
 import ArmyBuilder, { type ArmyListWithUnits } from './components/ArmyBuilder.tsx'
@@ -24,11 +24,9 @@ function App() {
   const [userId, setUserId] = useState<string>('');
   const [token, setToken] = useState<string>('');
   const [username, setUsername] = useState<string>('');
-  //const [admin, setAdmin] = useState<boolean>(false);
-  const [modeOfUse, setModeOfUse] = useState<'dev' | 'prod'>('dev');
-  const [message, setMessage] = useState<string>('');
   const [selectedNation, setSelectedNation] = useState<Nation | null>(null);
   const [army, setArmy] = useState<ArmyListWithUnits>(defaultArmy);
+  const modeOfUse: 'dev'|'prod' = 'prod'; // change this if building to prod or using in dev mode
 
   const logUserOut = () => {
     setUserId('');
@@ -38,22 +36,11 @@ function App() {
     setSelectedNation(null);
   }
 
-  useEffect(() => {
-    //console.log('token ', token);
-    setModeOfUse('dev');
-    setMessage('');
-  }, []);
-  /*
-    useEffect( () => {
-      console.log('user: ', userId, username, token);
-    });
-  */
   return (
     <div className="App">
       <Header
         username={username}
         logUserOut={logUserOut}
-        message={message}
       />
       <Routes>
         <Route path="/" element={<ArmyBuilder
@@ -73,7 +60,9 @@ function App() {
           setUsername={setUsername}
           modeOfUse={modeOfUse}
         />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/register" element={<Register
+          modeOfUse={modeOfUse}
+        />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
 

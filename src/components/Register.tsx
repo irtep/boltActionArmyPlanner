@@ -27,14 +27,16 @@ const RegisterError = {
   UNAUTHORIZED: 403 as const,
 } as const;
 
-const Register: React.FC = (): React.ReactElement => {
+interface LocalProps {
+  modeOfUse: string;
+};
+
+const Register: React.FC<LocalProps> = ({ modeOfUse }): React.ReactElement => {
   const [msg, setMsg] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   
   const navigate: NavigateFunction = useNavigate();
   const formRef = useRef<RegisterFormElement>(null);
-
-  const modeOfUse: 'dev'|'prod' = 'dev';
 
   const clearMessage = (): void => {
     setTimeout(() => setMsg(''), 10000);
@@ -108,8 +110,8 @@ const Register: React.FC = (): React.ReactElement => {
       }
 
       const url: string = modeOfUse === "dev" 
-        ? "http://localhost:5509/api/auth/register" 
-        : "/api/auth/register";
+        ? "https://localhost:5509/api/auth/register" 
+        : "https://193.28.89.151:5509/api/auth/register";
 
       const requestBody: RegisterRequest = {
         username: username.trim(),

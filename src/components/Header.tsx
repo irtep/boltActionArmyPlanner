@@ -1,13 +1,12 @@
-import { Alert, Container, Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import NavButtons from './NavButtons';
 
 interface LocalProps {
     username: string;
     logUserOut: any;
-    message: string;
 };
 
-const Header: React.FC<LocalProps> = ({ message, username, logUserOut }): React.ReactElement => {
+const Header: React.FC<LocalProps> = ({ username, logUserOut }): React.ReactElement => {
 
     return (
         <Container sx={{
@@ -31,13 +30,6 @@ const Header: React.FC<LocalProps> = ({ message, username, logUserOut }): React.
                 logUserOut={logUserOut}
             />
 
-            <Container>
-                { // if message, show it here:
-                    (message !== '')
-                        ? <Alert severity="error">{message}</Alert>
-                        : <></>
-                }
-            </Container>
         </Container>
     );
 }

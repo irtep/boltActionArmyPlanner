@@ -89,8 +89,8 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
       }
 
       const url: string = modeOfUse === "dev" 
-        ? "http://localhost:5509/api/auth/login" 
-        : "/api/auth/login";
+        ? "https://localhost:5509/api/auth/login" 
+        : "https://193.28.89.151:5509/api/auth/login";
 
       const connection = await fetch(url, {
         method: "POST",
