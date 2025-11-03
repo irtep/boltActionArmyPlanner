@@ -219,6 +219,30 @@ export const armiesOfNation: Nation[] = [
                 ]
             },
             {
+                id: 'us55x',
+                name: 'Bazooka team',
+                type: 'Infantry',
+                baseCost: { inexperienced: 42, regular: 60, veteran: 78 },
+                extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
+                quantity: 2,
+                maxQuantity: 2,
+                weapons: '1 bazooka',
+                options:
+                {
+                    optionsDescription: [
+                        `By air, land, sea`
+                    ],
+                    options: [
+
+                    ]
+                },
+                specialRules: [
+                    'Team weapon',
+                    `Shaped Charge`,
+                    `By land etc. (if taken)`
+                ]
+            },
+            {
                 id: 'us6',
                 name: 'M4A3 Sherman 75MM',
                 type: 'Tank',
