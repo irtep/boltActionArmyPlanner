@@ -818,7 +818,12 @@ the rear arc) for +15pts each`,
                         `Spotter for 10pts`
                     ],
                     options: [
-
+                        {
+                            desc: 'spotter',
+                            price: 10,
+                            max: 1,
+                            exprerienceLevel: 'all'
+                        },
                     ]
                 },
                 specialRules: [
@@ -881,7 +886,7 @@ the rear arc) for +15pts each`,
                 extraManCost: { inexperienced: 7, regular: 10, veteran: 13 },
                 quantity: 1,
                 maxQuantity: 1,
-                weapons: '1 Turret-mounted light anti-tank gun with coaxial MMG',
+                weapons: '1 turret-mounted super-heavy anti-tank gun with co-axial MMG and 1 forward-facing hull-mounted MMG',
                 options:
                 {
                     optionsDescription: [
