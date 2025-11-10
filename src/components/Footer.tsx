@@ -13,7 +13,7 @@ const Footer: React.FC = (): React.ReactElement => {
             padding: 1
         }}>
             <Typography>
-                Version: 1.2.4
+                Version: 1.2.5
             </Typography>
         </Container>
     );

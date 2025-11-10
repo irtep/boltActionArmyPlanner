@@ -32,9 +32,9 @@ const ShowArmyList: React.FC<LocalProps> = ({ army, setArmy }): React.ReactEleme
 
         // Calculate additional men cost
         const costPerMan: Record<ExperienceLevel, number> = {
-            inexperienced: 7,
-            regular: 10,
-            veteran: 13
+            inexperienced: unit.extraManCost.inexperienced ? unit.extraManCost.inexperienced : 0,
+            regular: unit.extraManCost.regular ? unit.extraManCost.regular : 0,
+            veteran: unit.extraManCost.veteran ? unit.extraManCost.veteran : 0,
         };
         totalCost += (unit.selectedOptions?.additionalMen || 0) * costPerMan[unit.experience];
 

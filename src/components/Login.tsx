@@ -53,7 +53,7 @@ const Login: React.FC<LocalProps> = ({ setUserId, setToken, setUsername, modeOfU
       token: response.token,
       username: response.user.username
     };
-    console.log('handling: ', response.user.id, response.token);
+    //console.log('handling: ', response.user.id, response.token);
     setUserId(String(response.user.id));
     setToken(response.token);
     setUsername(response.user.username);
